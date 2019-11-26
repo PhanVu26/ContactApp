@@ -14,8 +14,7 @@
             android:src="@drawable/ic_close"/>
         <TextView
             android:layout_centerVertical="true"
-            android:textSize="24sp"
-            android:textColor="#000"
+            android:textSize="22sp"
             android:id="@+id/tv_header"
             android:layout_centerInParent="true"
             android:text="sdsadasd"

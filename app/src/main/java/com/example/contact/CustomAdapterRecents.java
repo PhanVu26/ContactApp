@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -39,7 +42,8 @@ public class CustomAdapterRecents extends ArrayAdapter<ContactRecents> {
             convertView = LayoutInflater.from(context).inflate(R.layout.row_listview_recents,parent,false);
             viewHolder = new CustomAdapterRecents.ViewHolder();
             viewHolder.tvPhone = (TextView) convertView.findViewById(R.id.tv_phone);
-            viewHolder.tvCallType = (TextView) convertView.findViewById(R.id.tv_call_type);
+            viewHolder.ivCallType = (ImageView) convertView.findViewById(R.id.iv_call_type);
+            viewHolder.civAvatar = (CircleImageView) convertView.findViewById(R.id.civ_avatar);
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_date);
             convertView.setTag(viewHolder);
         }
@@ -48,14 +52,22 @@ public class CustomAdapterRecents extends ArrayAdapter<ContactRecents> {
         }
         final ContactRecents contactRecents = arrContact.get(position);
         viewHolder.tvPhone.setText(contactRecents.getPhone());
-        viewHolder.tvCallType.setText(contactRecents.getCallType());
-        viewHolder.tvDate.setText(contactRecents.getDate().toString());
+        viewHolder.civAvatar.setImageResource(R.drawable.ic_person_black_24dp);
+        if(contactRecents.getCallType().equals("OUTGOING")){
+            viewHolder.ivCallType.setImageResource(R.drawable.ic_call_made_black_24dp);
+        }else if(contactRecents.getCallType().equals("INCOMING")){
+            viewHolder.ivCallType.setImageResource(R.drawable.ic_call_received_black_24dp);
+        }else
+            viewHolder.ivCallType.setImageResource(R.drawable.ic_call_missed_black_24dp);
+        DateFormat sdf= new SimpleDateFormat("EEE, MMM dd KK:mm:ss a",new Locale("en"));
+        viewHolder.tvDate.setText(sdf.format(contactRecents.getDate()));
         // Call button
         return convertView;
     }
     public class ViewHolder{
         TextView tvPhone;
-        TextView tvCallType;
+        ImageView ivCallType;
+        CircleImageView civAvatar;
         TextView tvDate;
     }
 }

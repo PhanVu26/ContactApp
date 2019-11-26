@@ -79,13 +79,13 @@
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_avatar_foreground"/>
+            android:src="@drawable/ic_person_black_24dp"/>
         <Button
             android:id="@+id/btn_choose_avatar"
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#EEE"
-            android:text="THAY ĐỔI"/>
+            android:text="Chọn Avartar"/>
     </LinearLayout>
 </LinearLayout>
