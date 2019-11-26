@@ -64,7 +64,6 @@ public class AddContactActivity extends AppCompatActivity {
                 Contact contact = new Contact();
                 contact.name = edtName.getText().toString();
                 contact.phone = edtPhone.getText().toString();
-                //contact.uriAvatar  = (R.drawable.profile) + "";
                 if(uri == null){
                     contact.uriAvatar = "";
                 }
@@ -81,6 +80,24 @@ public class AddContactActivity extends AppCompatActivity {
                 }
             }
         });
+        // Chọn avatar từ thư viện ảnh
+        /*btnChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED){
+                        String [] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        requestPermissions(permissions,PERMISSION_CODE);
+                    }else{
+                        pickImageFromGallery();
+                    }
+                }
+                else{
+                    pickImageFromGallery();
+                }
+            }
+        });*/
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
