@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_contacts"
+        android:icon="@drawable/ic_contacts"
+        android:title="@string/title_contacts" />
+
+    <item
+        android:id="@+id/navigation_recents"
+        android:icon="@drawable/ic_recent"
+        android:title="@string/title_recents" />
+
+    <item
+        android:id="@+id/navigation_favourites"
+        android:icon="@drawable/ic_favourite"
+        android:title="@string/title_favourites" />
+
+    <item
+        android:id="@+id/navigation_synchronize"
+        android:icon="@drawable/ic_sync"
+        android:title="@string/title_synchronize" />
+</menu>
