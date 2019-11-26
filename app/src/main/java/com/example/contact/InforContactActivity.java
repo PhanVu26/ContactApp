@@ -63,14 +63,15 @@ public class InforContactActivity extends AppCompatActivity {
         //db.close();
     }
 
-    public void SendSMS(View view) {
-       // The number on which you want to send SMS
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", contact.phone, null)));
-    }
 
     public void Call(View view) {
         Intent intent = new Intent(Intent.ACTION_DIAL,Uri.fromParts("tel",contact.getPhone(),null));
         startActivity(intent);
+    }
+    // Mở Hộp thoại nhắn tin
+    public void SendSMS(View view) {
+        // The number on which you want to send SMS
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", contact.phone, null)));
     }
 
     @Override
