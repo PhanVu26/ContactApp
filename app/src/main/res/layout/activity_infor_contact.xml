@@ -25,18 +25,20 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <ImageView
-            android:clickable="true"
-            android:id="@+id/iv_favourite"
+        <CheckBox
+            android:layout_centerVertical="true"
+            android:id="@+id/cb_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_star_black" />
+            android:clickable="true"
+            android:focusable="true"
+            android:button="@drawable/check" />
         <ImageView
             android:clickable="true"
             android:onClick="EditContact"
             android:layout_marginLeft="15dp"
             android:id="@+id/ib_edit"
-            android:layout_toRightOf="@+id/iv_favourite"
+            android:layout_toRightOf="@+id/cb_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit" />

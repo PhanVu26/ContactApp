@@ -9,6 +9,16 @@ public class Contact implements Serializable {
     String name;
     String phone;
     String uriAvatar;
+    int isClick = 0;
+
+    public int getIsClick() {
+        return isClick;
+    }
+
+    public void setIsClick(int isClick) {
+        this.isClick = isClick;
+    }
+
     int Id;
 
     public int getId() {

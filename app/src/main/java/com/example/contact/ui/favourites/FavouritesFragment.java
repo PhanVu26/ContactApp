@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,24 +13,29 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.contact.Contact;
+import com.example.contact.CustomAdapter;
+import com.example.contact.MyDatabase;
 import com.example.contact.R;
+
+import java.util.ArrayList;
 
 public class FavouritesFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    MyDatabase db;
+    ListView lvFavourites;
+    CustomAdapter adapter;
+    ArrayList<Contact> favouriteList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favourites, container, false);
-        final TextView textView = root.findViewById(R.id.text_favourites);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        db = new MyDatabase(getActivity());
+        lvFavourites = root.findViewById(R.id.lv_favourites);
+        favouriteList = db.getAllFavourites();
+        adapter = new CustomAdapter(getActivity(),R.layout.row_listview,favouriteList);
+        lvFavourites.setAdapter(adapter);
+
         return root;
     }
 }

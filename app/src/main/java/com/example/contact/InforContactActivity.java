@@ -10,12 +10,17 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contact.ui.contacts.ContactsFragment;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class InforContactActivity extends AppCompatActivity {
     ImageView ivEdit;
@@ -26,6 +31,7 @@ public class InforContactActivity extends AppCompatActivity {
     Contact contact;
     String uri;
     static final int EDT_CODE = 456;
+    CheckBox cbFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class InforContactActivity extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.tv_name);
         tvPhone = (TextView) findViewById(R.id.tv_phone);
         ivAvatar = (ImageView) findViewById(R.id.iv_avatar);
+        cbFavourite = (CheckBox) findViewById(R.id.cb_favourite);
         db = new MyDatabase(this);
 
         Intent intent = getIntent();
@@ -46,6 +53,25 @@ public class InforContactActivity extends AppCompatActivity {
         if(contact.uriAvatar.equals("")){
             ivAvatar.setImageResource(R.drawable.ic_person_black_24dp);
         }else ivAvatar.setImageURI(Uri.parse(contact.uriAvatar));
+
+
+        if (contact.getIsClick() == 1) {
+            cbFavourite.setChecked(true);
+        } else {
+            cbFavourite.setChecked(false);
+        }
+        cbFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    db.addFavourites(contact);
+                    contact.setIsClick(1);
+                }else{
+                    db.deleteFavourites(contact);
+                    contact.setIsClick(0);
+                }
+            }
+        });
 
     }
 

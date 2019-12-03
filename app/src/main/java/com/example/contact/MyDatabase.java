@@ -21,7 +21,9 @@ public class MyDatabase extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String script = "create table Contact(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
+        String script2 = "create table Favourites(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
         db.execSQL(script);
+        db.execSQL(script2);
     }
 
     @Override
@@ -43,6 +45,21 @@ public class MyDatabase extends SQLiteOpenHelper{
         }
         return contacts;
     }
+    public ArrayList<Contact> getAllFavourites(){
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+        String script = "select*from favourites";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(script,null);
+        while(cursor.moveToNext()){
+            Contact contact = new Contact();
+            contact.setId(cursor.getInt(0));
+            contact.setName(cursor.getString(1));
+            contact.setPhone(cursor.getString(2));
+            contact.setUriAvatar(cursor.getString(3));
+            contacts.add(contact);
+        }
+        return contacts;
+    }
     public void addContact(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -52,8 +69,24 @@ public class MyDatabase extends SQLiteOpenHelper{
         db.insert("contact",null,values);
         db.close();
     }
+
+    public void addFavourites(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name",contact.getName());
+        values.put("phone",contact.getPhone());
+        values.put("uri",contact.getUriAvatar());
+        db.insert("favourites",null,values);
+        db.close();
+    }
+
     public void deleteContact(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("contact","id = ?",new String[]{String.valueOf(contact.getId())});
+    }
+
+    public void deleteFavourites(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("favourites","id = ?",new String[]{String.valueOf(contact.getId())});
     }
 }
