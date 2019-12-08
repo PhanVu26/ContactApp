@@ -79,8 +79,6 @@ public class ContactsFragment extends Fragment {
                 intent.putExtra("package",bundle);
                 index = listContacts.indexOf(contact);
                 editContact = contact;
-                //db.deleteContact(contact);
-                //startActivity(intent);
                 startActivityForResult(intent,EDT_CODE);
             }
         });
@@ -113,11 +111,12 @@ public class ContactsFragment extends Fragment {
             Contact contact = (Contact) bundle.getSerializable("contact");
             listContacts.remove(index);
             customAdapter.notifyDataSetChanged();
-            listContacts.add(index,contact);
-            db.addContact(contact);
-            db.deleteContact(editContact);
+            //listContacts.add(index,contact);
+            //db.addContact(contact);
+            //db.deleteContact(editContact);
+            db.UpdateContact(contact);
+            listContacts = db.getAllContact();
             customAdapter.notifyDataSetChanged();
         }
-
     }
 }

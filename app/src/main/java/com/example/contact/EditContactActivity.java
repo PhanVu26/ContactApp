@@ -28,6 +28,7 @@ public class EditContactActivity extends AppCompatActivity {
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     Uri uri;
+    Contact contact;
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +41,11 @@ public class EditContactActivity extends AppCompatActivity {
         edtPhone = (EditText) findViewById(R.id.edt_num_phone);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("package");
-        Contact contact = (Contact) bundle.getSerializable("contact");
+        contact = (Contact) bundle.getSerializable("contact");
+        final int favourite = contact.getIsClick();
         edtName.setText(contact.getName());
         edtPhone.setText(contact.getPhone());
+        uri = Uri.parse(contact.getUriAvatar());
         if(contact.uriAvatar.equals("")){
             ivAvatar.setImageResource(R.drawable.ic_person_black_24dp);
         }else ivAvatar.setImageURI(Uri.parse(contact.uriAvatar));
@@ -68,23 +71,25 @@ public class EditContactActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Contact contact = new Contact();
-                contact.name = edtName.getText().toString();
-                contact.phone = edtPhone.getText().toString();
+                Contact c = new Contact();
+                c.name = edtName.getText().toString();
+                c.phone = edtPhone.getText().toString();
                 //contact.uriAvatar  = (R.drawable.profile) + "";
                 if(uri == null){
-                    contact.uriAvatar = "";
+                    c.uriAvatar = "";
                 }
-                else contact.uriAvatar = uri + "";
-                if((contact.name.isEmpty() != true)&& (contact.phone.isEmpty() != true)){
+                else c.uriAvatar = uri + "";
+                c.setIsClick(favourite);
+                c.setId(contact.getId());
+                if((c.name.isEmpty() != true)&& (c.phone.isEmpty() != true)){
                     Intent intent = new Intent(EditContactActivity.this,InforContactActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("contact", contact);
+                    bundle.putSerializable("contact", c);
                     intent.putExtra("package",bundle);
                     setResult(RESULT_OK,intent);
                     finish();
                 }else{
-                    checkInfor(contact);
+                    checkInfor(c);
                 }
             }
         });

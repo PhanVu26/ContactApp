@@ -20,10 +20,10 @@ public class MyDatabase extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String script = "create table Contact(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
-        String script2 = "create table Favourites(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
+        String script = "create table Contact(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT,favourite INTEGER)";
+        //String script2 = "create table Favourites(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
         db.execSQL(script);
-        db.execSQL(script2);
+        //db.execSQL(script2);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MyDatabase extends SQLiteOpenHelper{
     }
     public ArrayList<Contact> getAllFavourites(){
         ArrayList<Contact> contacts = new ArrayList<Contact>();
-        String script = "select*from favourites";
+        String script = "select*from contact where favourite = "+1+"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(script,null);
         while(cursor.moveToNext()){
@@ -56,6 +56,7 @@ public class MyDatabase extends SQLiteOpenHelper{
             contact.setName(cursor.getString(1));
             contact.setPhone(cursor.getString(2));
             contact.setUriAvatar(cursor.getString(3));
+            contact.setIsClick(cursor.getInt(4));
             contacts.add(contact);
         }
         return contacts;
@@ -66,27 +67,38 @@ public class MyDatabase extends SQLiteOpenHelper{
         values.put("name",contact.getName());
         values.put("phone",contact.getPhone());
         values.put("uri",contact.getUriAvatar());
+        values.put("favourite",contact.getIsClick());
         db.insert("contact",null,values);
         db.close();
     }
 
-    public void addFavourites(Contact contact){
+    public void UpdateContact(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id",contact.getId());
+        values.put("name",contact.getName());
+        values.put("phone",contact.getPhone());
+        values.put("uri",contact.getUriAvatar());
+        values.put("favourite",contact.getIsClick());
+        db.update("contact",values,"id = ?",new String[]{String.valueOf(contact.getId())});
+        db.close();
+    }
+
+    public void UpdateFavourite(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name",contact.getName());
         values.put("phone",contact.getPhone());
         values.put("uri",contact.getUriAvatar());
-        db.insert("favourites",null,values);
+        values.put("id",contact.getId());
+        values.put("favourite",contact.getIsClick());
+        db.update("contact",values,"id = ?",new String[]{String.valueOf(contact.getId())});
         db.close();
     }
+
 
     public void deleteContact(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("contact","id = ?",new String[]{String.valueOf(contact.getId())});
-    }
-
-    public void deleteFavourites(Contact contact){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("favourites","id = ?",new String[]{String.valueOf(contact.getId())});
     }
 }

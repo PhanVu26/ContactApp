@@ -62,6 +62,7 @@ public class AddContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Contact contact = new Contact();
+                contact.setIsClick(0);
                 contact.name = edtName.getText().toString();
                 contact.phone = edtPhone.getText().toString();
                 if(uri == null){

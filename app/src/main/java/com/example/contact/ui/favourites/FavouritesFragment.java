@@ -32,7 +32,7 @@ public class FavouritesFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_favourites, container, false);
         db = new MyDatabase(getActivity());
         lvFavourites = root.findViewById(R.id.lv_favourites);
-        favouriteList = db.getAllFavourites();
+        favouriteList = db.getAllContact();
         adapter = new CustomAdapter(getActivity(),R.layout.row_listview,favouriteList);
         lvFavourites.setAdapter(adapter);
 

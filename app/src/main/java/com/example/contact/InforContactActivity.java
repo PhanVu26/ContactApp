@@ -64,10 +64,8 @@ public class InforContactActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
-                    db.addFavourites(contact);
                     contact.setIsClick(1);
                 }else{
-                    db.deleteFavourites(contact);
                     contact.setIsClick(0);
                 }
             }
@@ -77,10 +75,10 @@ public class InforContactActivity extends AppCompatActivity {
 
     public void EditContact(View view) {
         Intent intent = new Intent(InforContactActivity.this,EditContactActivity.class);
-        Contact contact = new Contact();
+        /*Contact contact = new Contact();
         contact.name = tvName.getText().toString();
         contact.phone = tvPhone.getText().toString();
-        contact.uriAvatar = uri;
+        contact.uriAvatar = uri;*/
         Bundle bundle = new Bundle();
         bundle.putSerializable("contact",contact);
         intent.putExtra("package",bundle);
