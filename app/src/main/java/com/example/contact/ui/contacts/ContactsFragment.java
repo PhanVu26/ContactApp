@@ -3,12 +3,14 @@ package com.example.contact.ui.contacts;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.SearchView;
@@ -29,14 +31,18 @@ import com.example.contact.MyDatabase;
 import com.example.contact.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ContactsFragment extends Fragment {
+public class ContactsFragment extends Fragment implements SearchView.OnQueryTextListener{
     static final int ADD_CODE = 123;
     static final int EDT_CODE = 456;
+    private static final int REQUEST_CODE = 1234;
     private MyDatabase db;
     Contact editContact;
     ArrayList<Contact> contacts;
@@ -47,6 +53,7 @@ public class ContactsFragment extends Fragment {
     ListView lvContact;
     SearchView searchView;
     CustomAdapter adapter;
+    ImageView searchByVoice;
     int index;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,14 +68,24 @@ public class ContactsFragment extends Fragment {
         listContacts.addAll(contacts);
         customAdapter = new CustomAdapter(getActivity(),R.layout.row_listview,listContacts);
         lvContact.setAdapter(customAdapter);
+        searchView = root.findViewById(R.id.sv_contact);
+        searchView.setOnQueryTextListener(this);
+        searchByVoice = root.findViewById(R.id.im_search_voice);
+        searchByVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice searching...");
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+
 
         adapter = new CustomAdapter(getActivity(),R.layout.row_listview,listContacts);
         //Getting the instance of AutoCompleteTextView
-        MultiAutoCompleteTextView actv= (MultiAutoCompleteTextView)root.findViewById(R.id.sv_search);
-        //actv.setThreshold(1);//will start working from first character
-        actv.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
-        actv.setTextColor(Color.RED);
-
         lvContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -118,5 +135,22 @@ public class ContactsFragment extends Fragment {
             listContacts = db.getAllContact();
             customAdapter.notifyDataSetChanged();
         }
+        else if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            final ArrayList < String > result= intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String searchResult = result.get(0);
+            customAdapter.filter(searchResult);
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        String text = s;
+        customAdapter.filter(s);
+        return false;
     }
 }
