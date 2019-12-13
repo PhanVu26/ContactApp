@@ -1,5 +1,6 @@
 package com.example.contact.ui.contacts;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -78,7 +80,13 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice searching...");
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-                startActivityForResult(intent, REQUEST_CODE);
+                try {
+                    startActivityForResult(intent, REQUEST_CODE);
+                } catch (ActivityNotFoundException a) {
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            "not supported",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -123,7 +131,7 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             customAdapter.notifyDataSetChanged();
 
         }
-        else if(requestCode == EDT_CODE && resultCode == RESULT_OK){ // EditActivity
+        if(requestCode == EDT_CODE && resultCode == RESULT_OK){ // EditActivity
             Bundle bundle = intent.getBundleExtra("package");
             Contact contact = (Contact) bundle.getSerializable("contact");
             listContacts.remove(index);
@@ -135,7 +143,7 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             listContacts = db.getAllContact();
             customAdapter.notifyDataSetChanged();
         }
-        else if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             final ArrayList < String > result= intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String searchResult = result.get(0);
             customAdapter.filter(searchResult);
