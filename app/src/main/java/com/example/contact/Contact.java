@@ -10,6 +10,7 @@ public class Contact implements Serializable {
     String phone;
     String uriAvatar;
     int isClick = 0;
+    int Id;
 
     public int getIsClick() {
         return isClick;
@@ -18,8 +19,6 @@ public class Contact implements Serializable {
     public void setIsClick(int isClick) {
         this.isClick = isClick;
     }
-
-    int Id;
 
     public int getId() {
         return Id;

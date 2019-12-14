@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.contact.ui.contacts.ContactsFragment;
 
-import static android.widget.Toast.LENGTH_SHORT;
 
 public class InforContactActivity extends AppCompatActivity {
     ImageView ivEdit;
@@ -31,7 +30,6 @@ public class InforContactActivity extends AppCompatActivity {
     Contact contact;
     String uri;
     static final int EDT_CODE = 456;
-    CheckBox cbFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class InforContactActivity extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.tv_name);
         tvPhone = (TextView) findViewById(R.id.tv_phone);
         ivAvatar = (ImageView) findViewById(R.id.iv_avatar);
-        cbFavourite = (CheckBox) findViewById(R.id.cb_favourite);
         db = new MyDatabase(this);
 
         Intent intent = getIntent();
@@ -55,36 +52,14 @@ public class InforContactActivity extends AppCompatActivity {
         }else ivAvatar.setImageURI(Uri.parse(contact.uriAvatar));
 
 
-        if (contact.getIsClick() == 1) {
-            cbFavourite.setChecked(true);
-        } else {
-            cbFavourite.setChecked(false);
-        }
-        cbFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    contact.setIsClick(1);
-                }else{
-                    contact.setIsClick(0);
-                }
-            }
-        });
-
     }
 
     public void EditContact(View view) {
         Intent intent = new Intent(InforContactActivity.this,EditContactActivity.class);
-        /*Contact contact = new Contact();
-        contact.name = tvName.getText().toString();
-        contact.phone = tvPhone.getText().toString();
-        contact.uriAvatar = uri;*/
         Bundle bundle = new Bundle();
         bundle.putSerializable("contact",contact);
         intent.putExtra("package",bundle);
         startActivityForResult(intent,EDT_CODE);
-        //db.deleteContact(contact);
-        //db.close();
     }
 
 

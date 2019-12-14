@@ -31,6 +31,7 @@ public class AddContactActivity extends AppCompatActivity {
     CircleImageView profileImage;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
+    static int id = 0;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -62,6 +63,7 @@ public class AddContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Contact contact = new Contact();
+                contact.setId(id);id++;
                 contact.setIsClick(0);
                 contact.name = edtName.getText().toString();
                 contact.phone = edtPhone.getText().toString();

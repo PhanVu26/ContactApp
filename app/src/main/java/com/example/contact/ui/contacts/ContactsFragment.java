@@ -135,13 +135,10 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             Bundle bundle = intent.getBundleExtra("package");
             Contact contact = (Contact) bundle.getSerializable("contact");
             listContacts.remove(index);
+            db.deleteContact(editContact);
+            listContacts.add(index,contact);
             customAdapter.notifyDataSetChanged();
-            //listContacts.add(index,contact);
-            //db.addContact(contact);
-            //db.deleteContact(editContact);
-            db.UpdateContact(contact);
-            listContacts = db.getAllContact();
-            customAdapter.notifyDataSetChanged();
+            db.addContact(contact);
         }
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             final ArrayList < String > result= intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);

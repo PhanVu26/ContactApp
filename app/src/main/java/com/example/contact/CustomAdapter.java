@@ -27,7 +27,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         this.context = context;
         this.resource = resource;
         this.arrContact = arrContact;
-        this.temp1 = new ArrayList<Contact>();
+        this.temp1 = new ArrayList<>();
         this.temp1.addAll(arrContact);
     }
 

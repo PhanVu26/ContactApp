@@ -47,7 +47,7 @@ public class MyDatabase extends SQLiteOpenHelper{
     }
     public ArrayList<Contact> getAllFavourites(){
         ArrayList<Contact> contacts = new ArrayList<Contact>();
-        String script = "select*from contact where favourite = "+1+"";
+        String script = "select*from contact where favourite = 1";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(script,null);
         while(cursor.moveToNext()){
@@ -68,6 +68,7 @@ public class MyDatabase extends SQLiteOpenHelper{
         values.put("phone",contact.getPhone());
         values.put("uri",contact.getUriAvatar());
         values.put("favourite",contact.getIsClick());
+        values.put("id",contact.getId());
         db.insert("contact",null,values);
         db.close();
     }

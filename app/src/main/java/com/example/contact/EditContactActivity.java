@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.example.contact.ui.contacts.ContactsFragment;
 
 public class EditContactActivity extends AppCompatActivity {
+    CheckBox cbFavourite;
     EditText edtName;
     EditText edtPhone;
     ImageView ivAvatar;
@@ -39,10 +42,11 @@ public class EditContactActivity extends AppCompatActivity {
         btnChange = (ImageView) findViewById(R.id.btn_change);
         edtName = (EditText) findViewById(R.id.edt_name);
         edtPhone = (EditText) findViewById(R.id.edt_num_phone);
+        cbFavourite = (CheckBox) findViewById(R.id.cb_favourite);
+
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("package");
         contact = (Contact) bundle.getSerializable("contact");
-        final int favourite = contact.getIsClick();
         edtName.setText(contact.getName());
         edtPhone.setText(contact.getPhone());
         uri = Uri.parse(contact.getUriAvatar());
@@ -50,6 +54,21 @@ public class EditContactActivity extends AppCompatActivity {
             ivAvatar.setImageResource(R.drawable.ic_person_black_24dp);
         }else ivAvatar.setImageURI(Uri.parse(contact.uriAvatar));
 
+        if (contact.getIsClick() == 1) {
+            cbFavourite.setChecked(true);
+        } else {
+            cbFavourite.setChecked(false);
+        }
+        cbFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    contact.setIsClick(1);
+                }else{
+                    contact.setIsClick(0);
+                }
+            }
+        });
 
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -74,12 +93,11 @@ public class EditContactActivity extends AppCompatActivity {
                 Contact c = new Contact();
                 c.name = edtName.getText().toString();
                 c.phone = edtPhone.getText().toString();
-                //contact.uriAvatar  = (R.drawable.profile) + "";
+                c.setIsClick(contact.getIsClick());
                 if(uri == null){
                     c.uriAvatar = "";
                 }
                 else c.uriAvatar = uri + "";
-                c.setIsClick(favourite);
                 c.setId(contact.getId());
                 if((c.name.isEmpty() != true)&& (c.phone.isEmpty() != true)){
                     Intent intent = new Intent(EditContactActivity.this,InforContactActivity.class);
