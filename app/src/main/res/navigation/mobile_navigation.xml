@@ -22,9 +22,4 @@
         android:name="com.example.contact.ui.favourites.FavouritesFragment"
         android:label="@string/title_favourites"
         tools:layout="@layout/fragment_favourites" />
-    <fragment
-        android:id="@+id/navigation_synchronize"
-        android:name="com.example.contact.ui.favourites.FavouritesFragment"
-        android:label="@string/title_synchronize"
-        tools:layout="@layout/fragment_synchronize" />
 </navigation>

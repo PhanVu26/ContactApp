@@ -15,9 +15,4 @@
         android:id="@+id/navigation_favourites"
         android:icon="@drawable/ic_favourite"
         android:title="@string/title_favourites" />
-
-    <item
-        android:id="@+id/navigation_synchronize"
-        android:icon="@drawable/ic_sync"
-        android:title="@string/title_synchronize" />
 </menu>
