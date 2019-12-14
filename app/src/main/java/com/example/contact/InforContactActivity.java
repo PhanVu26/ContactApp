@@ -85,6 +85,17 @@ public class InforContactActivity extends AppCompatActivity {
         Bundle bundle2 = new Bundle();
         bundle2.putSerializable("contact",contact);
         intent2.putExtra("package",bundle2);
+        intent2.putExtra("delete","no");
+        setResult(RESULT_OK,intent2);
+        finish();
+    }
+
+    public void deleteContact(View view) {
+        Intent intent2 = new Intent(InforContactActivity.this,ContactsFragment.class);
+        Bundle bundle2 = new Bundle();
+        bundle2.putSerializable("contact",contact);
+        intent2.putExtra("package",bundle2);
+        intent2.putExtra("delete","yes");
         setResult(RESULT_OK,intent2);
         finish();
     }

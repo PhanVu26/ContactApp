@@ -136,9 +136,12 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             Contact contact = (Contact) bundle.getSerializable("contact");
             listContacts.remove(index);
             db.deleteContact(editContact);
-            listContacts.add(index,contact);
+            String s = intent.getStringExtra("delete");
+            if(s.equals("no")){
+                listContacts.add(index,contact);
+                db.addContact(contact);
+            }
             customAdapter.notifyDataSetChanged();
-            db.addContact(contact);
         }
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             final ArrayList < String > result= intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);

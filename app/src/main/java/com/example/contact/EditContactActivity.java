@@ -104,6 +104,7 @@ public class EditContactActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("contact", c);
                     intent.putExtra("package",bundle);
+                    intent.putExtra("delete","no");
                     setResult(RESULT_OK,intent);
                     finish();
                 }else{
