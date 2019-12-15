@@ -87,6 +87,12 @@ public class EditContactActivity extends AppCompatActivity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(EditContactActivity.this,InforContactActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("contact", contact);
+                intent.putExtra("package",bundle);
+                intent.putExtra("delete","no");// Thông báo không xóa contact này
+                setResult(RESULT_OK,intent);
                 finish();
             }
         });
