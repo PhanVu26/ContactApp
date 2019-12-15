@@ -4,7 +4,6 @@ package com.example.contact;
 
 import java.io.Serializable;
 
-
 public class Contact implements Serializable {
     String name;
     String phone;
