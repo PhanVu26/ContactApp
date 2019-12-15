@@ -3,7 +3,6 @@ package com.example.contact;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -18,9 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.contact.ui.contacts.ContactsFragment;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddContactActivity extends AppCompatActivity {
@@ -38,13 +35,31 @@ public class AddContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
-
-        edtName = (EditText) findViewById(R.id.edt_name);
-        edtPhone = (EditText) findViewById(R.id.edt_num_phone);
-        btnChooseImage = (Button) findViewById(R.id.btn_choose_avatar);
-        profileImage = (CircleImageView) findViewById(R.id.avatar);
-
+        getDefinition();// khai báo các thành phần giao diện
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        setCustomActionBar();
+
+        // Chọn ảnh từ thư viện
+        btnChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED){
+                        String [] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        requestPermissions(permissions,PERMISSION_CODE);
+                    }else{
+                        pickImageFromGallery();
+                    }
+                }
+                else{
+                    pickImageFromGallery();
+                }
+            }
+        });
+    }
+
+    private void setCustomActionBar() {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
         //getSupportActionBar().setElevation(0);
@@ -83,25 +98,15 @@ public class AddContactActivity extends AppCompatActivity {
                 }
             }
         });
-        btnChooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_DENIED){
-                        String [] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                        requestPermissions(permissions,PERMISSION_CODE);
-                    }else{
-                        pickImageFromGallery();
-                    }
-                }
-                else{
-                    pickImageFromGallery();
-                }
-            }
-        });
-
     }
+
+    private void getDefinition() {
+        edtName = (EditText) findViewById(R.id.edt_name);
+        edtPhone = (EditText) findViewById(R.id.edt_num_phone);
+        btnChooseImage = (Button) findViewById(R.id.btn_choose_avatar);
+        profileImage = (CircleImageView) findViewById(R.id.avatar);
+    }
+
     public void checkInfor(Contact contact) {
         if(contact.name.isEmpty()){
             Toast.makeText(this,"Vui lòng nhập tên!!!",Toast.LENGTH_SHORT).show();
@@ -109,6 +114,7 @@ public class AddContactActivity extends AppCompatActivity {
             Toast.makeText(this,"Vui lòng nhập số điện thoại!!!",Toast.LENGTH_SHORT).show();
         }
     }
+
     private void pickImageFromGallery() {
         String action;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -117,12 +123,10 @@ public class AddContactActivity extends AppCompatActivity {
             action = Intent.ACTION_PICK;
         }
         Intent intent = new Intent(action, uri);
-        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(Intent.createChooser(intent, "Select File"), IMAGE_PICK_CODE);
         }
-        //startActivityForResult(intent,IMAGE_PICK_CODE);
     }
 
     @Override

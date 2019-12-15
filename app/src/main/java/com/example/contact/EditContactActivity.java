@@ -3,7 +3,6 @@ package com.example.contact;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -19,8 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.contact.ui.contacts.ContactsFragment;
 
 public class EditContactActivity extends AppCompatActivity {
     CheckBox cbFavourite;
@@ -38,15 +35,29 @@ public class EditContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
 
+        // SetCustomActionBar
+        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
+        //getSupportActionBar().setElevation(0);
+
+        View view = getSupportActionBar().getCustomView();
+        TextView name = view.findViewById(R.id.tv_header);
+        ImageView close = view.findViewById(R.id.iv_close);
+        ImageView done = view.findViewById(R.id.iv_done);
+        name.setText("Edit contact");
+
         ivAvatar = (ImageView) findViewById(R.id.iv_avatar);
         btnChange = (ImageView) findViewById(R.id.btn_change);
         edtName = (EditText) findViewById(R.id.edt_name);
         edtPhone = (EditText) findViewById(R.id.edt_num_phone);
         cbFavourite = (CheckBox) findViewById(R.id.cb_favourite);
 
+        // Nhận intent từ InforActivity
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("package");
         contact = (Contact) bundle.getSerializable("contact");
+
         edtName.setText(contact.getName());
         edtPhone.setText(contact.getPhone());
         uri = Uri.parse(contact.getUriAvatar());
@@ -59,6 +70,8 @@ public class EditContactActivity extends AppCompatActivity {
         } else {
             cbFavourite.setChecked(false);
         }
+
+        // Kiểm tra người dùng có ấn chọn/bỏ chọn
         cbFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -70,23 +83,14 @@ public class EditContactActivity extends AppCompatActivity {
             }
         });
 
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
-        //getSupportActionBar().setElevation(0);
-
-        View view = getSupportActionBar().getCustomView();
-        TextView name = view.findViewById(R.id.tv_header);
-        ImageView close = view.findViewById(R.id.iv_close);
-        ImageView done = view.findViewById(R.id.iv_done);
-        name.setText("Edit contact");
-
+        // Close Activity
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+        // Finished Edit
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +108,7 @@ public class EditContactActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("contact", c);
                     intent.putExtra("package",bundle);
-                    intent.putExtra("delete","no");
+                    intent.putExtra("delete","no");// Thông báo không xóa contact này
                     setResult(RESULT_OK,intent);
                     finish();
                 }else{
@@ -112,6 +116,14 @@ public class EditContactActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void checkInfor(Contact contact) {
+        if(contact.name.isEmpty()){
+            Toast.makeText(this,"Vui lòng nhập tên!!!",Toast.LENGTH_SHORT).show();
+        }else if(contact.phone.isEmpty()){
+            Toast.makeText(this,"Vui lòng nhập số điện thoại!!!",Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void ChangeAvatar(View view) {
@@ -128,6 +140,7 @@ public class EditContactActivity extends AppCompatActivity {
             pickImageFromGallery();
         }
     }
+
     private void pickImageFromGallery() {
         String action;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -136,12 +149,10 @@ public class EditContactActivity extends AppCompatActivity {
             action = Intent.ACTION_PICK;
         }
         Intent intent = new Intent(action, uri);
-        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(Intent.createChooser(intent, "Select File"), IMAGE_PICK_CODE);
         }
-        //startActivityForResult(intent,IMAGE_PICK_CODE);
     }
 
     @Override
@@ -165,13 +176,6 @@ public class EditContactActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
             ivAvatar.setImageURI(data.getData());
             uri = data.getData();
-        }
-    }
-    public void checkInfor(Contact contact) {
-        if(contact.name.isEmpty()){
-            Toast.makeText(this,"Vui lòng nhập tên!!!",Toast.LENGTH_SHORT).show();
-        }else if(contact.phone.isEmpty()){
-            Toast.makeText(this,"Vui lòng nhập số điện thoại!!!",Toast.LENGTH_SHORT).show();
         }
     }
 }

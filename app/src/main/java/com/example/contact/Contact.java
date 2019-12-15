@@ -12,6 +12,16 @@ public class Contact implements Serializable {
     int isClick = 0;
     int Id;
 
+    public Contact() {
+    }
+
+    public Contact(String name, String phone, String uriAvatar) {
+        this.name = name;
+        this.phone = phone;
+        this.uriAvatar = uriAvatar;
+    }
+
+
     public int getIsClick() {
         return isClick;
     }
@@ -26,15 +36,6 @@ public class Contact implements Serializable {
 
     public void setId(int id) {
         Id = id;
-    }
-
-    public Contact() {
-    }
-
-    public Contact(String name, String phone, String uriAvatar) {
-        this.name = name;
-        this.phone = phone;
-        this.uriAvatar = uriAvatar;
     }
 
     public String getName() {

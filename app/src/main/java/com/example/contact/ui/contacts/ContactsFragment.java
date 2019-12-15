@@ -61,18 +61,24 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_contacts, container, false);
+
+        // Khởi tạo giá trị cho các biến
         floatingNewContactBtn = (FloatingActionButton) root.findViewById(R.id.floatinngNewContactBtn);
+        lvContact = (ListView) root.findViewById(R.id.lv_contact);
+        searchView = root.findViewById(R.id.sv_contact);
+        searchView.setOnQueryTextListener(this);
+        searchByVoice = root.findViewById(R.id.im_search_voice);
         listContacts = new ArrayList<Contact>();
         temp = new ArrayList<Contact>();
-        lvContact = (ListView) root.findViewById(R.id.lv_contact);
         db = new MyDatabase(getActivity());
+
+        // Lấy toàn bộ contact từ database để hiển thị
         contacts = db.getAllContact();
         listContacts.addAll(contacts);
         customAdapter = new CustomAdapter(getActivity(),R.layout.row_listview,listContacts);
         lvContact.setAdapter(customAdapter);
-        searchView = root.findViewById(R.id.sv_contact);
-        searchView.setOnQueryTextListener(this);
-        searchByVoice = root.findViewById(R.id.im_search_voice);
+
+        // Tìm kiếm bằng giọng nói
         searchByVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,10 +96,7 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             }
         });
 
-
-
-        adapter = new CustomAdapter(getActivity(),R.layout.row_listview,listContacts);
-        //Getting the instance of AutoCompleteTextView
+        // Ấn vào từng contact trong listView
         lvContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -107,6 +110,8 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
                 startActivityForResult(intent,EDT_CODE);
             }
         });
+
+        // Thêm contact mới
         floatingNewContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +119,7 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
                 startActivityForResult(intent,ADD_CODE);
             }
         });
+
         return root;
     }
 
@@ -125,11 +131,8 @@ public class ContactsFragment extends Fragment implements SearchView.OnQueryText
             Bundle bundle = intent.getBundleExtra("package");
             Contact contact = (Contact) bundle.getSerializable("contact");
             db.addContact(contact);
-            //contacts = db.getAllContact();
             listContacts.add(contact);
-            //listContacts.addAll(contacts);
             customAdapter.notifyDataSetChanged();
-
         }
         if(requestCode == EDT_CODE && resultCode == RESULT_OK){ // EditActivity
             Bundle bundle = intent.getBundleExtra("package");

@@ -28,7 +28,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         this.resource = resource;
         this.arrContact = arrContact;
         this.temp1 = new ArrayList<>();
-        this.temp1.addAll(arrContact);
+        this.temp1.addAll(arrContact); // Sao chép giá trị mảng arrContact
     }
 
     @NonNull
@@ -69,6 +69,7 @@ public class CustomAdapter extends ArrayAdapter<Contact> {
         TextView tvName;
         ImageButton btnCall;
     }
+
     // function Search
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());

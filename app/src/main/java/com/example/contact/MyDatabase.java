@@ -21,9 +21,7 @@ public class MyDatabase extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String script = "create table Contact(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT,favourite INTEGER)";
-        //String script2 = "create table Favourites(id INTEGER primary Key,name TEXT,phone TEXT,uri TEXT)";
         db.execSQL(script);
-        //db.execSQL(script2);
     }
 
     @Override
@@ -72,31 +70,6 @@ public class MyDatabase extends SQLiteOpenHelper{
         db.insert("contact",null,values);
         db.close();
     }
-
-    public void UpdateContact(Contact contact){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id",contact.getId());
-        values.put("name",contact.getName());
-        values.put("phone",contact.getPhone());
-        values.put("uri",contact.getUriAvatar());
-        values.put("favourite",contact.getIsClick());
-        db.update("contact",values,"id = ?",new String[]{String.valueOf(contact.getId())});
-        db.close();
-    }
-
-    public void UpdateFavourite(Contact contact){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("name",contact.getName());
-        values.put("phone",contact.getPhone());
-        values.put("uri",contact.getUriAvatar());
-        values.put("id",contact.getId());
-        values.put("favourite",contact.getIsClick());
-        db.update("contact",values,"id = ?",new String[]{String.valueOf(contact.getId())});
-        db.close();
-    }
-
 
     public void deleteContact(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();

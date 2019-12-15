@@ -61,7 +61,6 @@ public class CustomAdapterRecents extends ArrayAdapter<ContactRecents> {
             viewHolder.ivCallType.setImageResource(R.drawable.ic_call_missed_black_24dp);
         DateFormat sdf= new SimpleDateFormat("EEE, MMM dd KK:mm:ss a",new Locale("en"));
         viewHolder.tvDate.setText(sdf.format(contactRecents.getDate()));
-        // Call button
         return convertView;
     }
     public class ViewHolder{
